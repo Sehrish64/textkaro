@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TextKaro — Photo se Text Nikalo | Free OCR</title>
+<meta name="description" content="TextKaro: photo ya image se text nikalo — bilkul FREE. English aur Urdu OCR, sab kuch aapke browser mein, koi API key nahi.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<style>
+  :root{
+    --bg:#0b0b0e; --card:#15151c; --card2:#1c1c26; --gold:#d4af37; --gold2:#f1d67a;
+    --text:#f5f1e6; --muted:#a8a29a; --line:#2a2a35; --green:#4ade80; --red:#f87171;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;
+    background-image:radial-gradient(700px 300px at 50% -80px, rgba(212,175,55,.18), transparent 70%);}
+  .wrap{max-width:760px;margin:0 auto;padding:20px 16px 48px}
+  header{text-align:center;padding:18px 0 6px}
+  .logo{font-family:'Playfair Display',serif;font-size:44px;font-weight:800;letter-spacing:.5px;line-height:1}
+  .logo span{color:var(--gold)}
+  .tag{color:var(--muted);font-size:14px;margin-top:8px}
+  .privacy{display:flex;gap:8px;align-items:flex-start;background:#122015;border:1px solid #1f3a26;
+    color:#b9e7c6;border-radius:12px;padding:12px 14px;font-size:13.5px;line-height:1.55;margin:18px 0}
+  .privacy b{color:var(--green)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;margin-top:16px}
+  h2{font-family:'Playfair Display',serif;color:var(--gold2);font-size:21px;margin:0 0 4px}
+  .sub{color:var(--muted);font-size:13.5px;margin:0 0 14px;line-height:1.5}
+  label.lbl{display:block;font-size:13px;font-weight:600;color:var(--muted);margin:14px 0 6px}
+  select{width:100%;background:var(--card2);color:var(--text);border:1px solid var(--line);
+    border-radius:12px;padding:12px;font-size:15px;outline:none}
+  select:focus{border-color:var(--gold)}
+  .drop{border:2px dashed #3a3a48;border-radius:16px;padding:26px 16px;text-align:center;
+    cursor:pointer;transition:.2s;background:var(--card2)}
+  .drop:hover,.drop.over{border-color:var(--gold);background:#211d12}
+  .drop .big{font-size:34px}
+  .drop p{margin:8px 0 4px;font-weight:600}
+  .drop small{color:var(--muted);font-size:12.5px;line-height:1.5}
+  .btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+  button,.filebtn{flex:1;min-width:130px;border:0;border-radius:12px;padding:13px 14px;font-size:15px;
+    font-weight:700;cursor:pointer;font-family:inherit}
+  .gold{background:linear-gradient(135deg,#e8c766,#c39a2b);color:#1a1405}
+  .ghost{background:var(--card2);color:var(--text);border:1px solid var(--line)}
+  button:disabled{opacity:.45;cursor:not-allowed}
+  .preview{display:none;margin-top:14px;text-align:center}
+  .preview img{max-width:100%;max-height:320px;border-radius:12px;border:1px solid var(--line)}
+  .preview small{display:block;color:var(--muted);margin-top:6px}
+  .progress{display:none;margin-top:16px}
+  .bar{height:12px;background:var(--card2);border:1px solid var(--line);border-radius:99px;overflow:hidden}
+  .bar i{display:block;height:100%;width:0%;background:linear-gradient(90deg,#c39a2b,#f1d67a);transition:width .2s}
+  .ptext{font-size:13px;color:var(--muted);margin-top:6px}
+  .ptext b{color:var(--gold2)}
+  textarea{width:100%;min-height:190px;background:#0e0e13;color:var(--text);border:1px solid var(--line);
+    border-radius:12px;padding:14px;font-size:15.5px;line-height:1.65;font-family:inherit;resize:vertical;outline:none}
+  textarea:focus{border-color:var(--gold)}
+  textarea:dir(rtl){font-size:18px;line-height:2}
+  .counts{display:flex;gap:16px;color:var(--muted);font-size:13px;margin-top:8px;flex-wrap:wrap}
+  .counts b{color:var(--text)}
+  .status{font-size:13.5px;margin-top:10px;min-height:20px}
+  .status.ok{color:var(--green)} .status.err{color:var(--red)}
+  .how{font-size:14px;line-height:1.8;color:#d6d0c2;padding-left:20px;margin:6px 0 0}
+  .how li{margin-bottom:4px}
+  footer{text-align:center;color:#6b675e;font-size:12.5px;margin-top:28px;line-height:1.6}
+  footer a{color:var(--gold)}
+  @media(max-width:520px){ .logo{font-size:36px} .btnrow button,.btnrow .filebtn{min-width:100%} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">Text<span>Karo</span></div>
+    <div class="tag">Photo se text nikalo — bilkul FREE, koi sign-up nahi, koi API key nahi.</div>
+  </header>
+
+  <div class="privacy">🔒 <span><b>Privacy:</b> Aapki photo aapke device se <b>bahar nahi jati</b>.
+    OCR poora ka poora aapke browser mein chalta hai (Tesseract.js) — koi server, koi upload, koi API key nahi.</span></div>
+
+  <section class="card">
+    <h2>1. Image Chuno</h2>
+    <p class="sub">Gallery se image lo, camera se photo khencho, drag-drop karo, ya image copy kar ke yahan paste karo (Ctrl+V).</p>
+
+    <label class="lbl" for="lang">Text ki Language / زبان</label>
+    <select id="lang" aria-label="OCR language">
+      <option value="eng">English</option>
+      <option value="urd">Urdu اردو</option>
+      <option value="eng+urd" selected>English + Urdu (dono)</option>
+    </select>
+
+    <div class="drop" id="drop" tabindex="0" role="button" aria-label="Image drop zone">
+      <div class="big">🖼️</div>
+      <p>Image yahan drop karo ya click karo</p>
+      <small>JPG, PNG, WebP — saaf, seedhi photo behtar result deti hai</small>
+    </div>
+
+    <div class="btnrow">
+      <button class="filebtn gold" type="button" id="pickBtn">📁 Gallery se Chuno</button>
+      <button class="filebtn ghost" type="button" id="camBtn">📸 Camera se Photo</button>
+    </div>
+    <input type="file" id="fileInput" accept="image/*" hidden>
+    <input type="file" id="camInput" accept="image/*" capture="environment" hidden>
+
+    <div class="preview" id="previewBox">
+      <img id="previewImg" alt="Selected image preview">
+      <small id="fileMeta"></small>
+    </div>
+
+    <div class="btnrow">
+      <button class="gold" id="runBtn" disabled>✨ Text Nikalo</button>
+      <button class="ghost" id="clearBtn" type="button">🗑️ Saaf Karo</button>
+    </div>
+
+    <div class="progress" id="progressBox">
+      <div class="bar"><i id="barFill"></i></div>
+      <div class="ptext" id="ptext">Shuru ho raha hai…</div>
+    </div>
+    <div class="status" id="status" role="status"></div>
+  </section>
+
+  <section class="card">
+    <h2>2. Nikla Hua Text</h2>
+    <p class="sub">Text ko yahan edit bhi kar sakte hain — ghalti ho to khud theek kar lein.</p>
+    <textarea id="outText" placeholder="Yahan nikla hua text aayega…" dir="auto"></textarea>
+    <div class="counts">
+      <span><b id="charCount">0</b> characters</span>
+      <span><b id="wordCount">0</b> alfaaz / words</span>
+      <span><b id="lineCount">0</b> lines</span>
+    </div>
+    <div class="btnrow">
+      <button class="gold" id="copyBtn" type="button">📋 Copy Karo</button>
+      <button class="ghost" id="dlBtn" type="button">⬇️ .txt Download</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Behtar Result ke Liye Tips</h2>
+    <ol class="how">
+      <li>Photo seedhi aur roshan jagah par lein — tedhi ya dhundli photo mein ghaltiyan aati hain.</li>
+      <li>Text poora frame mein ho, kata hua na ho.</li>
+      <li>Urdu text ke liye "Urdu" ya "English + Urdu" select karein.</li>
+      <li>Pehli dafa Urdu model download hone mein kuch seconds lag sakte hain — ye sirf aik dafa hota hai.</li>
+    </ol>
+  </section>
+
+  <footer>
+    TextKaro — 100% FREE OCR, aapke browser mein.<br>
+    Powered by <a href="https://tesseract.projectnaptha.com/" target="_blank" rel="noopener">Tesseract.js</a> (open source).
+    Koi photo kahin save ya upload nahi hoti.
+  </footer>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const drop=$('drop'), fileInput=$('fileInput'), camInput=$('camInput');
+const previewBox=$('previewBox'), previewImg=$('previewImg'), fileMeta=$('fileMeta');
+const runBtn=$('runBtn'), outText=$('outText'), statusEl=$('status');
+const progressBox=$('progressBox'), barFill=$('barFill'), ptext=$('ptext');
+let currentFile=null, currentURL=null;
+
+function setStatus(msg, cls){ statusEl.textContent=msg; statusEl.className='status '+(cls||''); }
+function updateCounts(){
+  const t=outText.value;
+  $('charCount').textContent=t.length;
+  $('wordCount').textContent=t.trim()?t.trim().split(/\s+/).length:0;
+  $('lineCount').textContent=t?t.split(/\n/).length:0;
+}
+outText.addEventListener('input', updateCounts);
+
+function handleFile(file){
+  if(!file) return;
+  if(!file.type.startsWith('image/')){ setStatus('Ye image file nahi hai. Sirf JPG/PNG/WebP chunein.', 'err'); return; }
+  currentFile=file;
+  if(currentURL) URL.revokeObjectURL(currentURL);
+  currentURL=URL.createObjectURL(file);
+  previewImg.src=currentURL;
+  previewBox.style.display='block';
+  fileMeta.textContent=file.name+' • '+(file.size/1024).toFixed(0)+' KB';
+  runBtn.disabled=false;
+  setStatus('Image tayyar hai — "Text Nikalo" dabayein.', 'ok');
+}
+$('pickBtn').onclick=()=>fileInput.click();
+$('camBtn').onclick=()=>camInput.click();
+fileInput.onchange=e=>handleFile(e.target.files[0]);
+camInput.onchange=e=>handleFile(e.target.files[0]);
+drop.onclick=()=>fileInput.click();
+drop.onkeydown=e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); fileInput.click(); } };
+['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{ e.preventDefault(); drop.classList.add('over'); }));
+['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{ e.preventDefault(); drop.classList.remove('over'); }));
+drop.addEventListener('drop',e=>handleFile(e.dataTransfer.files[0]));
+document.addEventListener('paste',e=>{
+  const item=[...(e.clipboardData||{}).items||[]].find(i=>i.type.startsWith('image/'));
+  if(item) handleFile(item.getAsFile());
+});
+
+$('clearBtn').onclick=()=>{
+  currentFile=null; if(currentURL) URL.revokeObjectURL(currentURL);
+  previewBox.style.display='none'; fileInput.value=''; camInput.value='';
+  outText.value=''; updateCounts(); runBtn.disabled=true;
+  progressBox.style.display='none'; setStatus('');
+};
+
+runBtn.onclick=async()=>{
+  if(!currentFile) return;
+  const lang=$('lang').value;
+  runBtn.disabled=true; progressBox.style.display='block'; barFill.style.width='0%';
+  ptext.innerHTML='Model load ho raha hai… <b>0%</b>'; setStatus('');
+  try{
+    const { data:{ text } } = await Tesseract.recognize(currentFile, lang, {
+      logger:m=>{
+        if(m.status==='recognizing text'){
+          const p=Math.round((m.progress||0)*100);
+          barFill.style.width=p+'%';
+          ptext.innerHTML='Text pehchana ja raha hai… <b>'+p+'%</b>';
+        } else if(m.status==='loading language traineddata'){
+          const p=Math.round((m.progress||0)*100);
+          barFill.style.width=p+'%';
+          ptext.innerHTML='Language model load ho raha hai… <b>'+p+'%</b>';
+        }
+      }
+    });
+    outText.value=(text||'').trim();
+    updateCounts();
+    barFill.style.width='100%';
+    ptext.innerHTML='Mukammal! ✅';
+    if(!outText.value) setStatus('Koi text nahi mila. Saaf, roshan photo dobara try karein.', 'err');
+    else setStatus('Ho gaya! Text upar wale box mein hai — edit, copy ya download karein.', 'ok');
+  }catch(err){
+    console.error(err);
+    setStatus('OCR mein masla hua. Internet check kar ke dobara try karein (pehli dafa model download hota hai).', 'err');
+    ptext.textContent='Error — dobara try karein.';
+  }finally{ runBtn.disabled=false; }
+};
+
+$('copyBtn').onclick=async()=>{
+  const t=outText.value;
+  if(!t.trim()){ setStatus('Copy karne ke liye pehle text nikalein.', 'err'); return; }
+  try{ await navigator.clipboard.writeText(t); setStatus('Copy ho gaya! ✅', 'ok'); }
+  catch(e){
+    outText.select(); document.execCommand('copy');
+    setStatus('Copy ho gaya! ✅', 'ok');
+  }
+};
+$('dlBtn').onclick=()=>{
+  const t=outText.value;
+  if(!t.trim()){ setStatus('Download ke liye pehle text nikalein.', 'err'); return; }
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([t],{type:'text/plain;charset=utf-8'}));
+  a.download='textkaro-text.txt'; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
+  setStatus('.txt download ho gaya! ✅', 'ok');
+};
+updateCounts();
+</script>
+</body>
+</html>
