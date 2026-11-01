@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TextKaro — Photo se Text Nikalo (Free OCR)</title>
+  <meta name="description" content="TextKaro is a free photo-to-text (OCR) web app. Add any photo — gallery, camera, drag-and-drop or paste — and instantly extract text in English, Urdu, or both. Runs in your browser; no sign-up, no API key." />
+
+  <!-- Tailwind CSS (browser build) -->
+  <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+
+  <!-- Inter font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+
+<body class="overflow-x-clip bg-neutral-950 text-white antialiased [font-family:Inter,system-ui,-apple-system,sans-serif]">
+
+  <!-- ======================= NAVBAR ======================= -->
+  <nav class="sticky top-0 z-50 border-b border-white/10 bg-neutral-950/80 backdrop-blur-xl">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="flex h-16 items-center justify-between">
+
+        <!-- Logo -->
+        <a href="#" class="flex items-center gap-2.5">
+          <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-fuchsia-600 shadow-lg shadow-violet-600/30">
+            <img src="https://unpkg.com/lucide-static@1.44.0/icons/scan-text.svg" alt="" width="20" height="20" class="h-5 w-5 text-white" />
+          </span>
+          <span class="text-lg font-bold tracking-tight">TextKaro</span>
+        </a>
+
+        <!-- Desktop links -->
+        <div class="hidden items-center gap-8 text-sm font-medium text-neutral-300 lg:flex">
+          <a href="#features" class="transition hover:text-white">Features</a>
+          <a href="#how" class="transition hover:text-white">How it works</a>
+          <a href="#privacy" class="transition hover:text-white">Privacy</a>
+          <a href="#faq" class="transition hover:text-white">FAQ</a>
+        </div>
+
+        <!-- Desktop CTAs -->
+        <div class="hidden items-center gap-3 lg:flex">
+          <a href="https://sehrish64.github.io/textkaro/" target="_blank" rel="noopener"
+             class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-violet-600/30 transition hover:scale-[1.02] hover:opacity-90">
+            <img src="https://unpkg.com/lucide-static@1.44.0/icons/scan-line.svg" alt="" width="16" height="16" class="h-4 w-4 text-white" />
+            Open App
+          </a>
+        </div>
+
+        <!-- Mobile menu button -->
+        <button id="menuBtn" class="rounded-lg p-2 text-neutral-300 transition hover:bg-white/10 hover:text-white lg:hidden" aria-label="Toggle menu">
+          <img src="https://unpkg.com/lucide-static@1.44.0/icons/menu.svg" alt="" width="24" height="24" class="h-6 w-6 text-current" />
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile panel -->
+    <div id="mobileMenu" class="hidden border-t border-white/10 bg-neutral-950/95 px-4 pb-6 pt-3 lg:hidden">
+      <div class="flex flex-col gap-1 text-sm font-medium text-neutral-300">
+        <a href="#features" class="rounded-lg px-3 py-2.5 transition hover:bg-white/5 hover:text-white">Features</a>
+        <a href="#how" class="rounded-lg px-3 py-2.5 transition hover:bg-white/5 hover:text-white">How it works</a>
+        <a href="#privacy" class="rounded-lg px-3 py-2.5 transition hover:bg-white/5 hover:text-white">Privacy</a>
+        <a href="#faq" class="rounded-lg px-3 py-2.5 transition hover:bg-white/5 hover:text-white">FAQ</a>
+        <a href="https://sehrish64.github.io/textkaro/" target="_blank" rel="noopener"
+           class="mt-3 inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 px-5 py-2.5 font-semibold text-white">
+          <img src="https://unpkg.com/lucide-static@1.44.0/icons/scan-line.svg" alt="" width="16" height="16" class="h-4 w-4 text-white" />
+          Open App
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ======================= HERO ======================= -->
+  <section class="relative overflow-hidden">
+    <!-- Decorative blobs -->
+    <div class="pointer-events-none absolute -left-32 top-10 h-96 w-96 rounded-full bg-violet-600/20 blur-3xl"></div>
+    <div class="pointer-events-none absolute -right-24 top-40 h-80 w-80 rounded-full bg-fuchsia-600/20 blur-3xl"></div>
+    <div class="pointer-events-none absolute bottom-0 left-1/2 h-72 w-[36rem] -translate-x-1/2 rounded-full bg-cyan-500/10 blur-3xl"></div>
+
+    <div class="relative mx-auto max-w-7xl px-4 pb-20 pt-16 sm:px-6 lg:px-8 lg:pt-24">
+      <div class="grid items-center gap-16 lg:grid-cols-2">
+
+        <!-- Copy -->
+        <div>
+          <span class="inline-flex flex-wrap items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium text-neutral-300">
+            <span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
+            100% Free · No Sign-up · In-browser OCR
+          </span>
+
+          <h1 class="mt-6 text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
+            Photo se Text
+            <span class="bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-300 bg-clip-text text-transparent">Nikalo</span>
+            — Instantly.
+          </h1>
+
+          <p class="mt-6 max-w-xl text-lg leading-relaxed text-neutral-400">
+            TextKaro extracts text from any photo — English, Urdu, ya dono — right inside your browser. Your photo never leaves your device. Koi sign-up nahi, koi API key nahi, bilkul free.
+          </p>
+
+          <!-- CTAs -->
+          <div class="mt-8 flex flex-wrap items-center gap-4">
+            <a href="https://sehrish64.github.io/textkaro/" target="_blank" rel="noopener"
+               class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 px-7 py-3.5 text-sm font-semibold text-white shadow-xl shadow-violet-600/30 transition hover:scale-[1.02] hover:opacity-90">
+              <img src="https://unpkg.com/lucide-static@1.44.0/icons/scan-line.svg" alt="" width="18" height="18" class="h-[18px] w-[18px] text-white" />
+              Try TextKaro Free
+            </a>
+            <a href="#how" class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10">
+              See how it works
+              <img src="https://unpkg.com/lucide-static@1.44.0/icons/arrow-right.svg" alt="" width="16" height="16" class="h-4 w-4 text-current" />
+            </a>
+          </div>
+
+          <!-- Trust row -->
+          <div class="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-neutral-400">
+            <span class="inline-flex items-center gap-2">
+              <img src="https://unpkg.com/lucide-static@1.44.0/icons/check.svg" alt="" width="16" height="16" class="h-4 w-4 text-emerald-400" />
+              No account needed
+            </span>
+            <span class="inline-flex items-center gap-2">
+              <img src="https://unpkg.com/lucide-static@1.44.0/icons/check.svg" alt="" width="16" height="16" class="h-4 w-4 text-emerald-400" />
+              Photos never uploaded
+            </span>
+            <span class="inline-flex items-center gap-2">
+              <img src="https://unpkg.com/lucide-static@1.44.0/icons/check.svg" alt="" width="16" height="16" class="h-4 w-4 text-emerald-400" />
+              English + Urdu
+            </span>
+          </div>
+        </div>
+
+        <!-- Browser-style demo card -->
+        <div class="relative mx-auto w-full max-w-[520px]">
+          <div class="pointer-events-none absolute -inset-8 rounded-full bg-gradient-to-br from-violet-600/25 to-cyan-500/20 blur-3xl"></div>
+
+          <div class="relative z-10 overflow-hidden rounded-3xl border border-white/15 bg-neutral-900 shadow-2xl shadow-violet-500/20">
+            <!-- Browser chrome -->
+            <div class="flex items-center gap-3 border-b border-white/10 bg-neutral-950/60 px-5 py-3.5">
+              <div class="flex items-center gap-1.5">
+                <span class="h-3 w-3 rounded-full bg-red-500/80"></span>
+                <span class="h-3 w-3 rounded-full bg-amber-400/80"></span>
+                <span class="h-3 w-3 rounded-full bg-emerald-500/80"></span>
+              </div>
+              <div class="flex flex-1 items-center justify-center gap-2 rounded-full bg-white/5 px-4 py-1.5 text-xs text-neutral-400">
+                <img src="https://unpkg.com/lucide-static@1.44.0/icons/lock.svg" alt="" width="12" height="12" class="h-3 w-3 text-neutral-500" />
+                sehrish64.github.io/textkaro
+              </div>
+            </div>
+
+            <!-- Demo body -->
+            <div class="grid grid-cols-1 divide-y divide-white/10 sm:grid-cols-2 sm:divide-x sm:divide-y-0">
+
+              <!-- Left: sample photo -->
+              <div class="relative">
+                <!-- Sample "photo": self-contained paper-note visual (no external image) -->
+                <div class="flex h-64 w-full items-center justify-center bg-gradient-to-br from-neutral-800 to-neutral-900 p-6 sm:h-full" role="img" aria-label="Photo of a paper note with English and Urdu lines">
+                  <div class="w-full max-w-[250px] -rotate-2 rounded-lg bg-amber-50 px-5 py-4 shadow-2xl shadow-black/50 ring-1 ring-black/10">
+                    <p class="border-b-2 border-amber-200 pb-1.5 text-[13px] font-bold text-neutral-800" style="font-family:'Segoe Print','Bradley Hand','Comic Sans MS',cursive">Evening notes —</p>
+                    <p class="mt-2 text-[13px] leading-relaxed text-neutral-700" style="font-family:'Segoe Print','Bradley Hand','Comic Sans MS',cursive">Buy milk, eggs and bread.</p>
+                    <p class="mt-1.5 text-[15px] leading-relaxed text-neutral-800" dir="rtl" lang="ur">آج رات گھر پر میٹنگ ہے</p>
+                    <p class="mt-1.5 text-[13px] leading-relaxed text-neutral-700" style="font-family:'Segoe Print','Bradley Hand','Comic Sans MS',cursive">Call Sarah at 5 PM.</p>
+                    <p class="mt-1.5 text-[13px] leading-relaxed text-neutral-700" style="font-family:'Segoe Print','Bradley Hand','Comic Sans MS',cursive">Read two pages of the book.</p>
+                  </div>
+                </div>
+                <!-- Scan line overlay -->
+                <div id="scanLine" class="absolute inset-x-0 top-1/2 h-0.5 -translate-y-1/2 bg-gradient-to-r from-transparent via-fuchsia-400 to-transparent shadow-[0_0_12px_rgba(232,121,249,0.9)] animate-pulse"></div>
+                <span class="absolute left-3 top-3 rounded-full bg-black/60 px-3 py-1 text-[11px] font-medium text-white backdrop-blur">Sample photo</span>
+              </div>
+
+              <!-- Right: extracted text result -->
+              <div class="flex flex-col bg-neutral-950/40">
+                <div class="flex items-center justify-between px-4 pt-4">
+                  <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-400">
+                    <img src="https://unpkg.com/lucide-static@1.44.0/icons/check-circle.svg" alt="" width="14" height="14" class="h-3.5 w-3.5 text-current" />
+                    Text extracted
+                  </span>
+                  <div class="flex items-center gap-2">
+                    <button id="copyDemoBtn" class="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5 transition hover:bg-white/10" aria-label="Copy demo text">
+                      <img src="https://unpkg.com/lucide-static@1.44.0/icons/copy.svg" alt="" width="14" height="14" class="h-3.5 w-3.5 text-neutral-300" />
+                    </button>
+                    <button id="downloadDemoBtn" class="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5 transition hover:bg-white/10" aria-label="Download demo text as .txt">
+                      <img src="https://unpkg.com/lucide-static@1.44.0/icons/file-down.svg" alt="" width="14" height="14" class="h-3.5 w-3.5 text-neutral-300" />
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Editable extracted text -->
+                <div id="demoText" contenteditable="true" spellcheck="false"
+                     class="px-4 py-3 text-[13px] leading-relaxed text-neutral-200 outline-none">
+                  Evening notes —<br />
+                  Buy milk, eggs and bread.<br />
+                  آج رات گھر پر میٹنگ ہے<br />
+                  Call Sarah at 5 PM.<br />
+                  Read two pages of the book.
+                </div>
+
+                <div class="mt-auto flex items-center justify-between border-t border-white/10 px-4 py-3 text-[11px] text-neutral-500">
+                  <span id="demoCounts">18 words · 103 chars · EN + UR</span>
+                  <span class="inline-flex items-center gap-1 text-emerald-400">
+                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    on-device
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Floating badge: privacy -->
+          <div class="absolute -left-4 -bottom-5 z-20 flex items-center gap-2.5 rounded-2xl border border-white/10 bg-neutral-900/95 px-4 py-3 shadow-xl backdrop-blur">
+            <span class="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-500/15">
+              <img src="https://unpkg.com/lucide-static@1.44.0/icons/shield-check.svg" alt="" width="18" height="18" class="h-[18px] w-[18px] text-emerald-400" />
+            </span>
+            <div class="text-xs">
+              <p class="font-semibold">Photo never leaves</p>
+              <p class="text-neutral-400">your device 🔒</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= STATS BAND ======================= -->
+  <section class="border-y border-white/10 bg-white/[0.02]">
+    <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 gap-8 text-center lg:grid-cols-4">
+        <div>
+          <p class="text-3xl font-extrabold bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">0</p>
+          <p class="mt-1 text-sm text-neutral-400">Photos uploaded to servers</p>
+        </div>
+        <div>
+          <p class="text-3xl font-extrabold bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">2</p>
+          <p class="mt-1 text-sm text-neutral-400">Languages — English + Urdu</p>
+        </div>
+        <div>
+          <p class="text-3xl font-extrabold bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">100%</p>
+          <p class="mt-1 text-sm text-neutral-400">Free, forever</p>
+        </div>
+        <div>
+          <p class="text-3xl font-extrabold bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">1</p>
+          <p class="mt-1 text-sm text-neutral-400">Tap to copy or download</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= FEATURES ======================= -->
+  <section id="features" class="scroll-mt-20 py-20 lg:py-28">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-2xl text-center">
+        <p class="text-sm font-semibold uppercase tracking-widest text-violet-400">Features</p>
+        <h2 class="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">Everything the OCR nikalne ke liye chahiye</h2>
+        <p class="mt-4 text-lg text-neutral-400">Simple, fast, and completely private — TextKaro turns any photo into editable text in seconds.</p>
+      </div>
+
+      <div class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <!-- Card 1: Input sources -->
+        <div class="group rounded-3xl border border-white/10 bg-white/[0.03] p-7 transition hover:border-violet-500/40 hover:bg-white/[0.06]">
+          <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-600 to-fuchsia-600 shadow-lg shadow-violet-600/25">
+            <img src="https://unpkg.com/lucide-static@1.44.0/icons/image.svg" alt="" width="22" height="22" class="h-[22px] w-[22px] text-white" />
+          </span>
+          <h3 class="mt-5 text-lg font-bold">Add photo any way</h3>
+          <p class="mt-2 text-sm leading-relaxed text-neutral-400">Gallery, camera, drag-and-drop, ya paste — koi bhi photo, instantly pick karo. Formats: JPG, PNG, WEBP, GIF & more.</p>
+        </div>
+
+        <!-- Card 2: Bilingual -->
+        <div class="group rounded-3xl border border-white/10 bg-white/[0.03] p-7 transition hover:border-violet-500/40 hover:bg-white/[0.06]">
+          <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-500 to-sky-600 shadow-lg shadow-cyan-500/25">
+            <img src="https://unpkg.com/lucide-static@1.44.0/icons/languages.svg" alt="" width="22" height="22" class="h-[22px] w-[22px] text-white" />
+          </span>
+          <h3 class="mt-5 text-lg font-bold">English + Urdu OCR</h3>
+          <p class="mt-2 text-sm leading-relaxed text-neutral-400">Hindi/English text nikalo, Urdu text nikalo, ya dono ek saath — mixed-language photos bhi sahi se parse hoti hain.</p>
+        </div>
+
+        <!-- Card 3: Privacy -->
+        <div class="group rounded-3xl border border-white/10 bg-white/[0.03] p-7 transition hover:border-violet-500/40 hover:bg-white/[0.06]">
+          <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 shadow-lg shadow-emerald-500/25">
+            <img src="https://unpkg.com/lucide-static@1.44.0/icons/shield-check.svg" alt="" width="22" height="22" class="h-[22px] w-[22px] text-white" />
+          </span>
+          <h3 class="mt-5 text-lg font-bold">100% on-device</h3>
+          <p class="mt-2 text-sm leading-relaxed text-neutral-400">Sab kuch tumhare browser ke andar chalta hai. Photo kabhi upload nahi hoti — koi server, koi storage, koi tracking nahi.</p>
+        </div>
+
+        <!-- Card 4: Editable -->
+        <div class="group rounded-3xl border border-white/10 bg-white/[0.03] p-7 transition hover:border-violet-500/40 hover:bg-white/[0.06]">
+          <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 shadow-lg shadow-amber-500/25">
+            <img src="https://unpkg.com/lucide-static@1.44.0/icons/pencil.svg" alt="" width="22" height="22" class="h-[22px] w-[22px] text-white" />
+          </span>
+          <h3 class="mt-5 text-lg font-bold">Fully editable text</h3>
+          <p class="mt-2 text-sm leading-relaxed text-neutral-400">Extracted text ko directly edit karo — corrections karo, format karo, aur apna final text banao. White on black, clear and crisp.</p>
+        </div>
+
+        <!-- Card 5: Copy -->
+        <div class="group rounded-3xl border border-white/10 bg-white/[0.03] p-7 transition hover:border-violet-500/40 hover:bg-white/[0.06]">
+          <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-fuchsia-500 to-pink-600 shadow-lg shadow-fuchsia-500/25">
+            <img src="https://unpkg.com/lucide-static@1.44.0/icons/copy.svg" alt="" width="22" height="22" class="h-[22px] w-[22px] text-white" />
+          </span>
+          <h3 class="mt-5 text-lg font-bold">One-tap copy</h3>
+          <p class="mt-2 text-sm leading-relaxed text-neutral-400">Ek click mein poora text clipboard par — paste karo jahan chahe: notes, email, WhatsApp, ya koi bhi app.</p>
+        </div>
+
+        <!-- Card 6: Download + counts -->
+        <div class="group rounded-3xl border border-white/10 bg-white/[0.03] p-7 transition hover:border-violet-500/40 hover:bg-white/[0.06]">
+          <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-indigo-600 shadow-lg shadow-violet-500/25">
+            <img src="https://unpkg.com/lucide-static@1.44.0/icons/file-down.svg" alt="" width="22" height="22" class="h-[22px] w-[22px] text-white" />
+          </span>
+          <h3 class="mt-5 text-lg font-bold">Download .txt + counts</h3>
+          <p class="mt-2 text-sm leading-relaxed text-neutral-400">Text ko .txt file mein download karo, aur word/character counts live dekh kar — perfect for students, writers, and hard workers.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= HOW IT WORKS ======================= -->
+  <section id="how" class="scroll-mt-20 border-t border-white/10 bg-white/[0.02] py-20 lg:py-28">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-2xl text-center">
+        <p class="text-sm font-semibold uppercase tracking-widest text-violet-400">How it works</p>
+        <h2 class="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">Text nikalna ab 3 steps mein</h2>
+      </div>
+
+      <div class="mt-14 grid gap-8 md:grid-cols-3">
+        <div class="relative rounded-3xl border border-white/10 bg-neutral-950 p-8 text-center">
+          <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-violet-600 to-fuchsia-600 text-xl font-extrabold shadow-lg shadow-violet-600/30">1</div>
+          <h3 class="mt-5 text-lg font-bold">Photo add karo</h3>
+          <p class="mt-2 text-sm leading-relaxed text-neutral-400">Gallery se choose karo, camera se click karo, drag-and-drop karo, ya sirf paste kardo (Ctrl+V).</p>
+        </div>
+        <div class="relative rounded-3xl border border-white/10 bg-neutral-950 p-8 text-center">
+          <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-violet-600 to-fuchsia-600 text-xl font-extrabold shadow-lg shadow-violet-600/30">2</div>
+          <h3 class="mt-5 text-lg font-bold">Text instantly niklega</h3>
+          <p class="mt-2 text-sm leading-relaxed text-neutral-400">OCR engine foran kaam karta hai — English, Urdu, ya dono — sab tumhare browser ke andar, bina upload kiye.</p>
+        </div>
+        <div class="relative rounded-3xl border border-white/10 bg-neutral-950 p-8 text-center">
+          <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-violet-600 to-fuchsia-600 text-xl font-extrabold shadow-lg shadow-violet-600/30">3</div>
+          <h3 class="mt-5 text-lg font-bold">Edit, copy, download</h3>
+          <p class="mt-2 text-sm leading-relaxed text-neutral-400">Text ko edit karo, one-tap copy karo, ya .txt file ke tor par download karo. Done!</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= PRIVACY HIGHLIGHT ======================= -->
+  <section id="privacy" class="scroll-mt-20 py-20 lg:py-28">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="grid items-center gap-12 lg:grid-cols-2">
+        <div>
+          <p class="text-sm font-semibold uppercase tracking-widest text-emerald-400">Privacy first</p>
+          <h2 class="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">Your photo never leaves your device</h2>
+          <p class="mt-4 text-lg leading-relaxed text-neutral-400">
+            Most OCR apps bhejte hain tumhari photos apne servers par. TextKaro alag hai — sab processing tumhare browser mein hoti hai.
+          </p>
+          <ul class="mt-8 space-y-4">
+            <li class="flex items-start gap-3">
+              <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-500/15">
+                <img src="https://unpkg.com/lucide-static@1.44.0/icons/check.svg" alt="" width="16" height="16" class="h-4 w-4 text-emerald-400" />
+              </span>
+              <div>
+                <p class="font-semibold">No uploads, ever</p>
+                <p class="text-sm text-neutral-400">Aapki photo network par kabhi nahi jaati.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-500/15">
+                <img src="https://unpkg.com/lucide-static@1.44.0/icons/check.svg" alt="" width="16" height="16" class="h-4 w-4 text-emerald-400" />
+              </span>
+              <div>
+                <p class="font-semibold">No sign-up, no data</p>
+                <p class="text-sm text-neutral-400">Koi account nahi, koi email nahi, koi tracking nahi.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-500/15">
+                <img src="https://unpkg.com/lucide-static@1.44.0/icons/check.svg" alt="" width="16" height="16" class="h-4 w-4 text-emerald-400" />
+              </span>
+              <div>
+                <p class="font-semibold">Runs in your browser</p>
+                <p class="text-sm text-neutral-400">Saari OCR processing tumhare browser ke andar hoti hai — kisi server par bhejne ki zaroorat hi nahi.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Privacy visual: phone/window with shield -->
+        <div class="relative mx-auto w-full max-w-[400px]">
+          <div class="pointer-events-none absolute -inset-8 rounded-full bg-emerald-500/10 blur-3xl"></div>
+          <div class="relative z-10 rounded-3xl border border-white/15 bg-neutral-900 p-8 text-center shadow-2xl shadow-emerald-500/10">
+            <span class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 shadow-xl shadow-emerald-500/30">
+              <img src="https://unpkg.com/lucide-static@1.44.0/icons/shield-check.svg" alt="" width="38" height="38" class="h-10 w-10 text-white" />
+            </span>
+            <h3 class="mt-6 text-xl font-bold">Device-only processing</h3>
+            <p class="mt-2 text-sm leading-relaxed text-neutral-400">
+              Aapki photo, aapka text, aur aapki privacy — sab aapke paas rehta hai. 🔒
+            </p>
+            <div class="mt-6 flex flex-wrap items-center justify-center gap-2 text-xs text-neutral-300">
+              <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1.5">No servers</span>
+              <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1.5">No login</span>
+              <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1.5">No ads</span>
+              <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1.5">No trackers</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= TESTIMONIALS ======================= -->
+  <section class="border-t border-white/10 bg-white/[0.02] py-20 lg:py-28">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-2xl text-center">
+        <p class="text-sm font-semibold uppercase tracking-widest text-violet-400">Loved by users</p>
+        <h2 class="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">Jo log roz use karte hain</h2>
+      </div>
+
+      <div class="mt-14 grid gap-6 md:grid-cols-3">
+        <div class="rounded-3xl border border-white/10 bg-neutral-950 p-7">
+          <div class="flex items-center gap-1">
+            <img src="https://unpkg.com/lucide-static@1.44.0/icons/star.svg" alt="" width="16" height="16" class="h-4 w-4 text-amber-400" />
+            <img src="https://unpkg.com/lucide-static@1.44.0/icons/star.svg" alt="" width="16" height="16" class="h-4 w-4 text-amber-400" />
+            <img src="https://unpkg.com/lucide-static@1.44.0/icons/star.svg" alt="" width="16" height="16" class="h-4 w-4 text-amber-400" />
+            <img src="https://unpkg.com/lucide-static@1.44.0/icons/star.svg" alt="" width="16" height="16" class="h-4 w-4 text-amber-400" />
+            <img src="https://unpkg.com/lucide-static@1.44.0/icons/star.svg" alt="" width="16" height="16" class="h-4 w-4 text-amber-400" />
+          </div>
+          <p class="mt-4 text-sm leading-relaxed text-neutral-300">"Urdu notes ki photos se text nikalna ab bara easy ho gaya. Aur sab se achi baat — photo kabhi upload nahi hoti. Privacy ka khayal rakha hai."</p>
+          <div class="mt-6 flex items-center gap-3">
+            <img src="https://i.pravatar.cc/300?u=textkaro-ahmed" alt="Ahmed K." width="44" height="44" class="h-11 w-11 rounded-full" />
+            <div>
+              <p class="text-sm font-semibold">Ahmed K.</p>
+              <p class="text-xs text-neutral-500">Student · Karachi</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-3xl border border-white/10 bg-neutral-950 p-7">
+          <div class="flex items-center gap-1">
+            <img src="https://unpkg.com/lucide-static@1.44.0/icons/star.svg" alt="" width="16" height="16" class="h-4 w-4 text-amber-400" />
+            <img src="https://unpkg.com/lucide-static@1.44.0/icons/star.svg" alt="" width="16" height="16" class="h-4 w-4 text-amber-400" />
+            <img src="https://unpkg.com/lucide-static@1.44.0/icons/star.svg" alt="" width="16" height="16" class="h-4 w-4 text-amber-400" />
+            <img src="https://unpkg.com/lucide-static@1.44.0/icons/star.svg" alt="" width="16" height="16" class="h-4 w-4 text-amber-400" />
+            <img src="https://unpkg.com/lucide-static@1.44.0/icons/star.svg" alt="" width="16" height="16" class="h-4 w-4 text-amber-400" />
+          </div>
+          <p class="mt-4 text-sm leading-relaxed text-neutral-300">"I scan receipts and documents daily. The .txt download and live word count save me so much time. And it's genuinely free — no paywall surprises."</p>
+          <div class="mt-6 flex items-center gap-3">
+            <img src="https://i.pravatar.cc/300?u=textkaro-sarah" alt="Sarah M." width="44" height="44" class="h-11 w-11 rounded-full" />
+            <div>
+              <p class="text-sm font-semibold">Sarah M.</p>
+              <p class="text-xs text-neutral-500">Freelancer · Lahore</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-3xl border border-white/10 bg-neutral-950 p-7">
+          <div class="flex items-center gap-1">
+            <img src="https://unpkg.com/lucide-static@1.44.0/icons/star.svg" alt="" width="16" height="16" class="h-4 w-4 text-amber-400" />
+            <img src="https://unpkg.com/lucide-static@1.44.0/icons/star.svg" alt="" width="16" height="16" class="h-4 w-4 text-amber-400" />
+            <img src="https://unpkg.com/lucide-static@1.44.0/icons/star.svg" alt="" width="16" height="16" class="h-4 w-4 text-amber-400" />
+            <img src="https://unpkg.com/lucide-static@1.44.0/icons/star.svg" alt="" width="16" height="16" class="h-4 w-4 text-amber-400" />
+            <img src="https://unpkg.com/lucide-static@1.44.0/icons/star.svg" alt="" width="16" height="16" class="h-4 w-4 text-amber-400" />
+          </div>
+          <p class="mt-4 text-sm leading-relaxed text-neutral-300">"Works on my old laptop with no install, no account. Just open, paste a screenshot, and copy the text. Perfect tool for quick notes."</p>
+          <div class="mt-6 flex items-center gap-3">
+            <img src="https://i.pravatar.cc/300?u=textkaro-bilal" alt="Bilal A." width="44" height="44" class="h-11 w-11 rounded-full" />
+            <div>
+              <p class="text-sm font-semibold">Bilal A.</p>
+              <p class="text-xs text-neutral-500">Developer · Islamabad</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= FAQ ======================= -->
+  <section id="faq" class="scroll-mt-20 py-20 lg:py-28">
+    <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+      <div class="text-center">
+        <p class="text-sm font-semibold uppercase tracking-widest text-violet-400">FAQ</p>
+        <h2 class="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">Aksar pooche jane wale sawal</h2>
+      </div>
+
+      <div class="mt-12 space-y-4">
+        <div class="faq-item overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]">
+          <button class="faq-btn flex w-full items-center justify-between gap-4 px-6 py-5 text-left text-sm font-semibold text-white">
+            Kya TextKaro sach mein free hai?
+            <img src="https://unpkg.com/lucide-static@1.44.0/icons/chevron-down.svg" alt="" width="20" height="20" class="faq-chevron h-5 w-5 text-neutral-400 transition-transform duration-300" />
+          </button>
+          <div class="faq-panel hidden px-6 pb-5 text-sm leading-relaxed text-neutral-400">
+            Ji haan, bilkul free. Koi hidden charges, koi premium paywall, koi API key nahi. Chaho to future mein donations/subscriptions aa sakti hain, lekin core OCR free rahega.
+          </div>
+        </div>
+
+        <div class="faq-item overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]">
+          <button class="faq-btn flex w-full items-center justify-between gap-4 px-6 py-5 text-left text-sm font-semibold text-white">
+            Meri photo kahan jati hai?
+            <img src="https://unpkg.com/lucide-static@1.44.0/icons/chevron-down.svg" alt="" width="20" height="20" class="faq-chevron h-5 w-5 text-neutral-400 transition-transform duration-300" />
+          </button>
+          <div class="faq-panel hidden px-6 pb-5 text-sm leading-relaxed text-neutral-400">
+            Kahin nahi. Sab kuch aapke browser ke andar hota hai — photo, OCR processing, aur extracted text. Aapki photo kabhi network par upload nahi hoti.
+          </div>
+        </div>
+
+        <div class="faq-item overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]">
+          <button class="faq-btn flex w-full items-center justify-between gap-4 px-6 py-5 text-left text-sm font-semibold text-white">
+            Kya ye Urdu text bhi samajh sakta hai?
+            <img src="https://unpkg.com/lucide-static@1.44.0/icons/chevron-down.svg" alt="" width="20" height="20" class="faq-chevron h-5 w-5 text-neutral-400 transition-transform duration-300" />
+          </button>
+          <div class="faq-panel hidden px-6 pb-5 text-sm leading-relaxed text-neutral-400">
+            Haan! TextKaro English, Urdu, aur mixed language text support karta hai. Agar photo mein dono languages hain, to dono alag ho kar sahi tarah se nikalti hain.
+          </div>
+        </div>
+
+        <div class="faq-item overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]">
+          <button class="faq-btn flex w-full items-center justify-between gap-4 px-6 py-5 text-left text-sm font-semibold text-white">
+            Kya mujhe account banane ki zaroorat hai?
+            <img src="https://unpkg.com/lucide-static@1.44.0/icons/chevron-down.svg" alt="" width="20" height="20" class="faq-chevron h-5 w-5 text-neutral-400 transition-transform duration-300" />
+          </button>
+          <div class="faq-panel hidden px-6 pb-5 text-sm leading-relaxed text-neutral-400">
+            Bilkul nahi. Koi sign-up, koi email, koi login nahi. Page kholo, photo lagao, aur kaam shuru.
+          </div>
+        </div>
+
+        <div class="faq-item overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]">
+          <button class="faq-btn flex w-full items-center justify-between gap-4 px-6 py-5 text-left text-sm font-semibold text-white">
+            Kaun kaunsi photo formats support hoti hain?
+            <img src="https://unpkg.com/lucide-static@1.44.0/icons/chevron-down.svg" alt="" width="20" height="20" class="faq-chevron h-5 w-5 text-neutral-400 transition-transform duration-300" />
+          </button>
+          <div class="faq-panel hidden px-6 pb-5 text-sm leading-relaxed text-neutral-400">
+            JPG, PNG, WEBP, GIF, BMP, aur SVG — browser mein kholi ja sakne wali almost har image format. Screenshots bhi paste kar sakte ho (Ctrl+V).
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= CTA ======================= -->
+  <section class="pb-20 lg:pb-28">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-gradient-to-br from-violet-700 via-purple-700 to-fuchsia-700 px-8 py-16 text-center sm:px-16">
+        <div class="pointer-events-none absolute -left-20 -top-20 h-64 w-64 rounded-full bg-white/10 blur-3xl"></div>
+        <div class="pointer-events-none absolute -bottom-24 -right-16 h-72 w-72 rounded-full bg-cyan-300/20 blur-3xl"></div>
+
+        <h2 class="relative text-3xl font-extrabold tracking-tight sm:text-4xl">Photo kholo, text nikalo — aaj hi</h2>
+        <p class="relative mx-auto mt-4 max-w-xl text-lg text-white/80">Free hai, private hai, aur 10 seconds mein ready. Koi sign-up nahi — bas kholo aur shuru karo.</p>
+
+        <div class="relative mt-8 flex flex-wrap items-center justify-center gap-4">
+          <a href="https://sehrish64.github.io/textkaro/" target="_blank" rel="noopener"
+             class="inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 text-sm font-bold text-violet-700 shadow-xl transition hover:scale-[1.03]">
+            <img src="https://unpkg.com/lucide-static@1.44.0/icons/scan-line.svg" alt="" width="18" height="18" class="h-[18px] w-[18px] text-violet-700" />
+            Open TextKaro
+          </a>
+          <a href="#how" class="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-8 py-4 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/20">
+            How it works
+            <img src="https://unpkg.com/lucide-static@1.44.0/icons/arrow-right.svg" alt="" width="16" height="16" class="h-4 w-4 text-current" />
+          </a>
+        </div>
+        <p class="relative mt-6 text-xs text-white/60">100% free · On-device OCR · English + Urdu</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= FOOTER ======================= -->
+  <footer class="border-t border-white/10 bg-neutral-950">
+    <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+      <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
+        <!-- Brand -->
+        <div class="lg:col-span-2">
+          <a href="#" class="flex items-center gap-2.5">
+            <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-fuchsia-600">
+              <img src="https://unpkg.com/lucide-static@1.44.0/icons/scan-text.svg" alt="" width="20" height="20" class="h-5 w-5 text-white" />
+            </span>
+            <span class="text-lg font-bold tracking-tight">TextKaro</span>
+          </a>
+          <p class="mt-4 max-w-sm text-sm leading-relaxed text-neutral-400">Photo se text nikalne wali free, private, in-browser OCR app. Made with care for students, writers, aur har wo shakhs jo kaam jaldi karna chahta hai.</p>
+        </div>
+
+        <!-- Link columns -->
+        <div>
+          <h4 class="text-sm font-bold uppercase tracking-wider text-white">App</h4>
+          <ul class="mt-4 space-y-3 text-sm text-neutral-400">
+            <li><a href="#features" class="transition hover:text-white">Features</a></li>
+            <li><a href="#how" class="transition hover:text-white">How it works</a></li>
+            <li><a href="#privacy" class="transition hover:text-white">Privacy</a></li>
+            <li><a href="https://sehrish64.github.io/textkaro/" target="_blank" rel="noopener" class="transition hover:text-white">Open App</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-sm font-bold uppercase tracking-wider text-white">Resources</h4>
+          <ul class="mt-4 space-y-3 text-sm text-neutral-400">
+            <li><a href="#faq" class="transition hover:text-white">FAQ</a></li>
+            <li><a href="#" class="transition hover:text-white">Blog</a></li>
+            <li><a href="#" class="transition hover:text-white">Feedback</a></li>
+            <li><a href="#" class="transition hover:text-white">Changelog</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-sm font-bold uppercase tracking-wider text-white">Connect</h4>
+          <ul class="mt-4 space-y-3 text-sm text-neutral-400">
+            <li><a href="#" class="transition hover:text-white">GitHub</a></li>
+            <li><a href="#" class="transition hover:text-white">Contact</a></li>
+            <li><a href="#" class="transition hover:text-white">Report an issue</a></li>
+            <li><a href="#" class="transition hover:text-white">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 text-sm text-neutral-500 sm:flex-row">
+        <p>© 2026 TextKaro. All rights reserved.</p>
+        <div class="flex items-center gap-6">
+          <a href="#" class="transition hover:text-white">Terms</a>
+          <a href="#" class="transition hover:text-white">Privacy</a>
+          <a href="#" class="transition hover:text-white">Cookies</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ======================= JAVASCRIPT ======================= -->
+  <script>
+    // ---------- Mobile menu toggle ----------
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    menuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // Close mobile menu when a link is tapped
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+    });
+
+    // ---------- FAQ accordion ----------
+    document.querySelectorAll('.faq-item').forEach(item => {
+      const btn = item.querySelector('.faq-btn');
+      const panel = item.querySelector('.faq-panel');
+      const chevron = item.querySelector('.faq-chevron');
+
+      btn.addEventListener('click', () => {
+        const isOpen = !panel.classList.contains('hidden');
+
+        // Close all items, then open the clicked one (accordion behavior)
+        document.querySelectorAll('.faq-item').forEach(other => {
+          other.querySelector('.faq-panel').classList.add('hidden');
+          other.querySelector('.faq-chevron').classList.remove('rotate-180');
+        });
+
+        if (!isOpen) {
+          panel.classList.remove('hidden');
+          chevron.classList.add('rotate-180');
+        }
+      });
+    });
+
+    // ---------- Demo: copy extracted text ----------
+    const demoText = document.getElementById('demoText');
+    const copyDemoBtn = document.getElementById('copyDemoBtn');
+
+    copyDemoBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(demoText.innerText);
+      } catch (err) {
+        // Fallback for older browsers / restricted contexts
+        const range = document.createRange();
+        range.selectNodeContents(demoText);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+        document.execCommand('copy');
+        sel.removeAllRanges();
+      }
+      // Visual feedback
+      copyDemoBtn.classList.add('bg-emerald-500/20');
+      copyDemoBtn.querySelector('img').src = 'https://unpkg.com/lucide-static@1.44.0/icons/check.svg';
+      setTimeout(() => {
+        copyDemoBtn.classList.remove('bg-emerald-500/20');
+        copyDemoBtn.querySelector('img').src = 'https://unpkg.com/lucide-static@1.44.0/icons/copy.svg';
+      }, 1200);
+    });
+
+    // ---------- Demo: download .txt ----------
+    const downloadDemoBtn = document.getElementById('downloadDemoBtn');
+
+    downloadDemoBtn.addEventListener('click', () => {
+      const blob = new Blob([demoText.innerText], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'textkaro-extracted-text.txt';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    });
+
+    // ---------- Live word/character counts in demo ----------
+    const demoCounts = document.getElementById('demoCounts');
+
+    function updateCounts() {
+      const text = demoText.innerText.trim();
+      const words = text ? text.split(/\s+/).length : 0;
+      const chars = text.length;
+      demoCounts.textContent = words + ' words · ' + chars + ' chars · EN + UR';
+    }
+
+    demoText.addEventListener('input', updateCounts);
+    // Initial count on load
+    updateCounts();
+  </script>
+
+</body>
+</html>
